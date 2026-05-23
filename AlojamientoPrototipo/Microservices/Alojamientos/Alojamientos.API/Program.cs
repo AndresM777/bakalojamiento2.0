@@ -3,6 +3,9 @@ using Alojamientos.DataAccess.Contexts;
 using Alojamientos.API.Extensions;
 using Alojamientos.API.Middleware;
 
+// ── Forzar IPv4 — Render free tier no soporta IPv6 ───
+AppContext.SetSwitch("System.Net.PreferIPv4Stack", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ── 1. Base de datos ─────────────────────────────────

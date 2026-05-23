@@ -4,6 +4,9 @@ using Reservas.API.Extensions;
 using Reservas.API.Middleware;
 using MassTransit;
 
+// ── Forzar IPv4 — Render free tier no soporta IPv6 ───
+AppContext.SetSwitch("System.Net.PreferIPv4Stack", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ── 1. Base de datos ─────────────────────────────────
