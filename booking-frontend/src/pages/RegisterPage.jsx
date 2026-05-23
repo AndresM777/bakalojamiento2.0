@@ -19,14 +19,14 @@ export default function RegisterPage() {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    nombre: '',
+    nombreCompleto: '',
     cedula: '',
     telefono: '',
     domicilio: '',
   });
 
   const validationRules = {
-    nombre: [{ validate: isRequired, message: 'El nombre es obligatorio' }],
+    nombreCompleto: [{ validate: isRequired, message: 'El nombre es obligatorio' }],
     email: [
       { validate: isRequired, message: 'El email es obligatorio' },
       { validate: isValidEmail, message: 'Ingresa un email válido' },
@@ -76,7 +76,7 @@ export default function RegisterPage() {
   };
 
   const fields = [
-    { name: 'nombre', label: 'Nombre completo', icon: HiOutlineUser, type: 'text', placeholder: 'Juan Pérez', autoComplete: 'name' },
+    { name: 'nombreCompleto', label: 'Nombre completo', icon: HiOutlineUser, type: 'text', placeholder: 'Juan Pérez', autoComplete: 'name' },
     { name: 'email', label: 'Correo electrónico', icon: HiOutlineEnvelope, type: 'email', placeholder: 'tu@email.com', autoComplete: 'email' },
     { name: 'password', label: 'Contraseña', icon: HiOutlineLockClosed, type: 'password', placeholder: '••••••••', autoComplete: 'new-password' },
     { name: 'cedula', label: 'Cédula', icon: HiOutlineIdentification, type: 'text', placeholder: '1234567890', autoComplete: 'off' },

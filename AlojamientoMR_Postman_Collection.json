@@ -56,18 +56,18 @@
           }
         },
         {
-          "name": "POST /clientes-lucano/register",
+          "name": "POST /clientes-lucano/registrar",
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Test\",\n  \"apellido\": \"Usuario\",\n  \"email\": \"test@prueba.com\",\n  \"password\": \"Test1234!\",\n  \"cedula\": \"1234567890\",\n  \"telefono\": \"0987654321\",\n  \"fechaNacimiento\": \"1990-01-15\"\n}"
+              "raw": "{\n  \"email\": \"test@prueba.com\",\n  \"password\": \"Test1234!\",\n  \"nombreCompleto\": \"Test Usuario\",\n  \"cedula\": \"1234567890\",\n  \"telefono\": \"0987654321\",\n  \"domicilio\": \"Calle Falsa 123\"\n}"
             },
             "url": {
-              "raw": "{{clientes_url}}/api/v1/clientes-lucano/register",
+              "raw": "{{clientes_url}}/api/v1/clientes-lucano/registrar",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v1", "clientes-lucano", "register"]
+              "path": ["api", "v1", "clientes-lucano", "registrar"]
             }
           }
         }

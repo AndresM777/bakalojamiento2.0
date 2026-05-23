@@ -94,15 +94,18 @@ export default function PropiedadDetallePage() {
       const payload = {
         clienteId: getClienteId(),
         alojamientoId: Number(id),
-        habitacionIds: [Number(form.habitacionId)],
         fechaCheckIn: form.fechaCheckIn,
         fechaCheckOut: form.fechaCheckOut,
         numAdultos: Number(form.numAdultos),
         numNinos: Number(form.numNinos),
         llevaMascotas: form.llevaMascotas,
-        numHabitaciones: 1,
-        subTotal: subtotal,
-        total: subtotal,
+        habitaciones: [
+          {
+            habitacionId: Number(form.habitacionId),
+            precioPorNoche: selectedHab ? selectedHab.precioNoche : 0,
+            numNoches: noches
+          }
+        ]
       };
 
       const { data } = await reservasApi.crear(payload);
