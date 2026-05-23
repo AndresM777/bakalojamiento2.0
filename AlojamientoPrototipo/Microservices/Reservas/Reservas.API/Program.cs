@@ -68,4 +68,25 @@ app.UseCors();
 // Mapeo de Controladores
 app.MapControllers();
 
+// ── Inicializar Datos Semilla ─────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<Reservas.DataAccess.Contexts.ReservasDbContext>();
+    try
+    {
+        if (!context.Descuentos.Any())
+        {
+            context.Descuentos.AddRange(
+                new Reservas.DataAccess.Entities.DescuentoEntity { Codigo = "PROMO10", Porcentaje = 10, Activo = true },
+                new Reservas.DataAccess.Entities.DescuentoEntity { Codigo = "VERANO20", Porcentaje = 20, Activo = true }
+            );
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al inicializar la base de datos de Reservas: {ex.Message}");
+    }
+}
+
 app.Run();

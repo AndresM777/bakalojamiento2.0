@@ -49,4 +49,28 @@ app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
 app.MapGrpcService<Alojamientos.API.GrpcServices.CalendarioGrpcService>()
    .EnableGrpcWeb();
 
+// ── Inicializar Datos Semilla ─────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<Alojamientos.DataAccess.Contexts.AlojamientosDbContext>();
+    try
+    {
+        if (!context.TiposAlojamiento.Any())
+        {
+            context.TiposAlojamiento.AddRange(
+                new Alojamientos.DataAccess.Entities.TipoAlojamientoEntity { Nombre = "Hotel", Descripcion = "Alojamiento con servicios" },
+                new Alojamientos.DataAccess.Entities.TipoAlojamientoEntity { Nombre = "Hostal", Descripcion = "Alojamiento compartido" },
+                new Alojamientos.DataAccess.Entities.TipoAlojamientoEntity { Nombre = "Apartamento", Descripcion = "Apartamento independiente" },
+                new Alojamientos.DataAccess.Entities.TipoAlojamientoEntity { Nombre = "Cabaña", Descripcion = "Cabaña rústica" },
+                new Alojamientos.DataAccess.Entities.TipoAlojamientoEntity { Nombre = "Casa", Descripcion = "Casa de vacaciones" }
+            );
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al inicializar la base de datos de Alojamientos: {ex.Message}");
+    }
+}
+
 app.Run();
