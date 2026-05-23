@@ -6,6 +6,7 @@ using MassTransit;
 
 // ── Forzar IPv4 — Render free tier no soporta IPv6 ───
 AppContext.SetSwitch("System.Net.PreferIPv4Stack", true);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
