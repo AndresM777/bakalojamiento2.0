@@ -44,7 +44,13 @@ export default function CheckoutPage() {
         reservaId: reserva.reservaId,
         metodoPagoId: Number(metodoId),
         monto: reserva.total,
-        descripcion: `Pago reserva ${reserva.codigoReserva}`,
+        detalles: [
+          {
+            descripcion: `Pago reserva ${reserva.codigoReserva}`,
+            cantidad: 1,
+            precioUnitario: reserva.total
+          }
+        ]
       };
       const { data } = await facturasApi.crear(payload);
       await facturasApi.aprobar(data.facturaId);
