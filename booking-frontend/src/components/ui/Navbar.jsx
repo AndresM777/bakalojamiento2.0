@@ -16,7 +16,7 @@ export default function Navbar() {
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
           <HiOutlineBuildingOffice2 size={28} />
-          <span>AlojamientoMR</span>
+          <span>Rodrigo's</span>
         </Link>
 
         <div className="navbar-links">

@@ -199,3 +199,66 @@
   .admin-sidebar { width: 200px; }
   .admin-main { margin-left: 200px; padding: 20px; }
 }
+
+/* Photo Manager Admin Styles */
+.photo-manager-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.photo-upload-section {
+  display: flex;
+  justify-content: flex-end;
+}
+.no-photos-msg {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 30px 0;
+  font-style: italic;
+}
+.photos-grid-admin {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.photo-item-admin {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+.photo-item-admin img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-medium);
+}
+.photo-item-admin:hover img {
+  transform: scale(1.05);
+}
+.delete-photo-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(220, 38, 38, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: all var(--transition-fast);
+}
+.delete-photo-btn:hover {
+  background: rgb(220, 38, 38);
+  transform: scale(1.1);
+}

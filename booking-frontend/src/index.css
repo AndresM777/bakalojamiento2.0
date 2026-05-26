@@ -829,6 +829,109 @@ input[type="checkbox"] {
   margin-bottom: 3rem;
 }
 
+/* Interactive detail gallery styling */
+.gallery-container-interactive {
+  position: relative;
+  width: 100%;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.gallery-main-interactive {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21/9;
+  background: var(--bg-secondary);
+}
+
+.gallery-main-interactive img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.gallery-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.65);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(4px);
+  user-select: none;
+  line-height: 1;
+}
+
+.gallery-nav-btn:hover {
+  background: rgba(99, 102, 241, 0.85);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.gallery-nav-btn.prev {
+  left: 1.5rem;
+}
+
+.gallery-nav-btn.next {
+  right: 1.5rem;
+}
+
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.gallery-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition-fast);
+}
+
+.gallery-dot.active {
+  background: var(--accent-primary);
+  transform: scale(1.25);
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+/* Gradient dark placeholder for fallback */
+.gallery-placeholder-dark {
+  width: 100%;
+  aspect-ratio: 21/9;
+  border-radius: var(--border-radius-xl);
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #020617 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  gap: 1.25rem;
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.gallery-placeholder-dark svg {
+  color: var(--accent-primary);
+  filter: drop-shadow(0 0 12px var(--accent-primary));
+}
+
 .gallery-main {
   width: 100%;
   aspect-ratio: 21/9;

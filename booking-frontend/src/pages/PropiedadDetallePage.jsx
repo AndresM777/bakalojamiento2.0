@@ -163,35 +163,54 @@ export default function PropiedadDetallePage() {
     }
   };
 
+  const handlePrevFoto = () => {
+    setFotoActual((prev) => (prev === 0 ? fotos.length - 1 : prev - 1));
+  };
+
+  const handleNextFoto = () => {
+    setFotoActual((prev) => (prev === fotos.length - 1 ? 0 : prev + 1));
+  };
+
   if (loading) return <LoadingSpinner text="Cargando propiedad..." />;
   if (!propiedad) return <div className="container"><p>Propiedad no encontrada.</p></div>;
 
   return (
     <div className="detalle-page">
       <div className="container">
-        {/* ── Galería ────────────────────────────────── */}
+        {/* ── Galería Interactiva ──────────────────────── */}
         <div className="detalle-gallery">
           {fotos.length > 0 ? (
-            <>
-              <div className="gallery-main">
+            <div className="gallery-container-interactive">
+              <div className="gallery-main-interactive">
                 <img src={fotos[fotoActual]?.url} alt={propiedad.nombre} />
-              </div>
-              {fotos.length > 1 && (
-                <div className="gallery-thumbs">
-                  {fotos.map((foto, idx) => (
-                    <button
-                      key={foto.fotoId}
-                      className={`gallery-thumb ${idx === fotoActual ? 'active' : ''}`}
-                      onClick={() => setFotoActual(idx)}
-                    >
-                      <img src={foto.url} alt={`Foto ${idx + 1}`} />
+                
+                {fotos.length > 1 && (
+                  <>
+                    <button className="gallery-nav-btn prev" onClick={handlePrevFoto} aria-label="Foto anterior">
+                      &lsaquo;
                     </button>
+                    <button className="gallery-nav-btn next" onClick={handleNextFoto} aria-label="Siguiente foto">
+                      &rsaquo;
+                    </button>
+                  </>
+                )}
+              </div>
+              
+              {fotos.length > 1 && (
+                <div className="gallery-dots">
+                  {fotos.map((_, idx) => (
+                    <button
+                      key={idx}
+                      className={`gallery-dot ${idx === fotoActual ? 'active' : ''}`}
+                      onClick={() => setFotoActual(idx)}
+                      aria-label={`Ir a foto ${idx + 1}`}
+                    />
                   ))}
                 </div>
               )}
-            </>
+            </div>
           ) : (
-            <div className="gallery-placeholder">
+            <div className="gallery-placeholder-dark">
               <HiOutlineBuildingOffice2 size={64} />
               <p>Sin fotos disponibles</p>
             </div>

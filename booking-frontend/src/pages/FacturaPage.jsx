@@ -64,7 +64,7 @@ export default function FacturaPage() {
           </div>
 
           <div className="factura-footer">
-            <p>Gracias por tu reserva en AlojamientoMR</p>
+            <p>Gracias por tu reserva en Rodrigo's</p>
           </div>
         </div>
       </div>

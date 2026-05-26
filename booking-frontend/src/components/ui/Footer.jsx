@@ -8,10 +8,10 @@ export default function Footer() {
       <div className="footer-container">
         <div className="footer-brand">
           <HiOutlineBuildingOffice2 size={24} />
-          <span>AlojamientoMR</span>
+          <span>Rodrigo's</span>
         </div>
         <p className="footer-copy">
-          &copy; {currentYear} AlojamientoMR — Plataforma de Reservas.
+          &copy; {currentYear} Rodrigo's — Plataforma de Reservas.
           Todos los derechos reservados.
         </p>
       </div>
