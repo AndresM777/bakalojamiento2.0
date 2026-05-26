@@ -27,7 +27,7 @@ export default function CheckoutPage() {
         const reservaData = resR.data;
         if (reservaData && (reservaData.estado === 'Confirmada' || reservaData.estado === 'Completada')) {
           toast.success('Esta reserva ya se encuentra pagada.');
-          navigate(`/factura/${reservaData.codigoReserva || reservaData.reservaId}`);
+          navigate(`/factura/${reservaData.reservaId}`);
           return;
         }
         setReserva(reservaData);
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
       }
 
       toast.success('¡Pago procesado exitosamente!');
-      navigate(`/factura/${reserva.codigoReserva || reserva.reservaId}`);
+      navigate(`/factura/${reserva.reservaId}`);
     } catch (err) {
       toast.error(err.backendMessage || 'Error al procesar el pago');
     } finally { setPagando(false); }

@@ -64,10 +64,10 @@ export default function MisReservasPage() {
                   <strong>{formatCurrency(r.total)}</strong>
                   <div className="reserva-actions">
                     {r.estado?.toLowerCase() === 'pendiente' && (
-                      <Link to={`/checkout/${r.codigoReserva || r.reservaId}`} className="btn btn-primary btn-sm">Pagar</Link>
+                      <Link to={`/checkout/${r.reservaId}`} className="btn btn-primary btn-sm">Pagar</Link>
                     )}
                     {r.estado?.toLowerCase() === 'confirmada' && (
-                      <Link to={`/factura/${r.codigoReserva || r.reservaId}`} className="btn btn-ghost btn-sm">Ver Factura</Link>
+                      <Link to={`/factura/${r.reservaId}`} className="btn btn-ghost btn-sm">Ver Factura</Link>
                     )}
                   </div>
                 </div>

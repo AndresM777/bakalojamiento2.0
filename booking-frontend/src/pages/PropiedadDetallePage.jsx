@@ -185,7 +185,7 @@ export default function PropiedadDetallePage() {
         console.error('Error al persistir la reserva en el caché local:', errStore);
       }
 
-      navigate(`/checkout/${data.codigoReserva || data.reservaId}`);
+      navigate(`/checkout/${data.reservaId}`);
     } catch (err) {
       toast.error(err.backendMessage || 'Error al crear la reserva');
     } finally {
