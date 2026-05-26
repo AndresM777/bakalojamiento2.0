@@ -33,7 +33,7 @@ export default function RegisterPage() {
     ],
     password: [
       { validate: isRequired, message: 'La contraseña es obligatoria' },
-      { validate: isValidPassword, message: 'Mínimo 6 caracteres' },
+      { validate: isValidPassword, message: 'Mínimo 8 caracteres' },
     ],
     cedula: [
       { validate: isRequired, message: 'La cédula es obligatoria' },

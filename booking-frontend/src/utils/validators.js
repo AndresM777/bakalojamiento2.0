@@ -7,10 +7,10 @@ export function isValidEmail(email) {
 }
 
 /**
- * Valida que la contraseña tenga mínimo 6 caracteres.
+ * Valida que la contraseña tenga mínimo 8 caracteres.
  */
 export function isValidPassword(password) {
-  return password && password.length >= 6;
+  return password && password.length >= 8;
 }
 
 /**

@@ -24,7 +24,13 @@ export default function CheckoutPage() {
           reservasApi.getById(codigo),
           metodosPagoApi.getAll(),
         ]);
-        setReserva(resR.data);
+        const reservaData = resR.data;
+        if (reservaData && (reservaData.estado === 'Confirmada' || reservaData.estado === 'Completada')) {
+          toast.success('Esta reserva ya se encuentra pagada.');
+          navigate(`/factura/${reservaData.codigoReserva || reservaData.reservaId}`);
+          return;
+        }
+        setReserva(reservaData);
         const m = Array.isArray(resM.data) ? resM.data : [];
         setMetodos(m);
         if (m.length > 0) setMetodoId(m[0].metodoPagoId);
@@ -34,7 +40,7 @@ export default function CheckoutPage() {
       } finally { setLoading(false); }
     };
     fetch();
-  }, [codigo]);
+  }, [codigo, navigate]);
 
   const handlePagar = async () => {
     if (!metodoId) { toast.error('Selecciona un método de pago'); return; }
@@ -54,6 +60,13 @@ export default function CheckoutPage() {
       };
       const { data } = await facturasApi.crear(payload);
       await facturasApi.aprobar(data.facturaId);
+      
+      try {
+        await reservasApi.actualizarEstado(reserva.reservaId, { estado: 'Confirmada' });
+      } catch (errState) {
+        console.error('Error al actualizar estado de la reserva:', errState);
+      }
+
       toast.success('¡Pago procesado exitosamente!');
       navigate(`/factura/${reserva.codigoReserva || reserva.reservaId}`);
     } catch (err) {

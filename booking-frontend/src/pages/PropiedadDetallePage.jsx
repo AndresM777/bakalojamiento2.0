@@ -89,6 +89,37 @@ export default function PropiedadDetallePage() {
       return;
     }
 
+    if (selectedHab) {
+      if (Number(form.numAdultos) > selectedHab.capacidadAdultos) {
+        toast.error(`La habitación seleccionada admite máximo ${selectedHab.capacidadAdultos} adulto(s).`);
+        return;
+      }
+      if (Number(form.numNinos) > selectedHab.capacidadNinos) {
+        toast.error(`La habitación seleccionada admite máximo ${selectedHab.capacidadNinos} niño(s).`);
+        return;
+      }
+    }
+
+    // Prevención de conflictos de fechas local
+    try {
+      const storedSlots = JSON.parse(localStorage.getItem('booked_slots') || '[]');
+      const checkIn = new Date(form.fechaCheckIn);
+      const checkOut = new Date(form.fechaCheckOut);
+      
+      const conflicto = storedSlots.some(slot => 
+        slot.habitacionId === Number(form.habitacionId) &&
+        checkIn < new Date(slot.fechaCheckOut) &&
+        checkOut > new Date(slot.fechaCheckIn)
+      );
+      
+      if (conflicto) {
+        toast.error('Ya tienes una reserva activa para esta habitación en las fechas seleccionadas.');
+        return;
+      }
+    } catch (errLocal) {
+      console.error('Error al verificar conflictos locales de reserva:', errLocal);
+    }
+
     setReservando(true);
     try {
       const payload = {
@@ -110,6 +141,20 @@ export default function PropiedadDetallePage() {
 
       const { data } = await reservasApi.crear(payload);
       toast.success('¡Reserva creada exitosamente!');
+      
+      // Guardar reserva localmente para evitar solapamientos futuros
+      try {
+        const storedSlots = JSON.parse(localStorage.getItem('booked_slots') || '[]');
+        storedSlots.push({
+          habitacionId: Number(form.habitacionId),
+          fechaCheckIn: form.fechaCheckIn,
+          fechaCheckOut: form.fechaCheckOut
+        });
+        localStorage.setItem('booked_slots', JSON.stringify(storedSlots));
+      } catch (errStore) {
+        console.error('Error al persistir la reserva en el caché local:', errStore);
+      }
+
       navigate(`/checkout/${data.codigoReserva || data.reservaId}`);
     } catch (err) {
       toast.error(err.backendMessage || 'Error al crear la reserva');
