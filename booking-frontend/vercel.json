@@ -5,7 +5,7 @@
       "destination": "https://apigatway-0wjx.onrender.com/api/v1/:path*"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]

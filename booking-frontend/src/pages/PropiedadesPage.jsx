@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useSearchParams } from 'react-router-dom';
 import { HiOutlineMapPin, HiOutlineMagnifyingGlass, HiStar, HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import { alojamientosApi } from '../api/alojamientos.api';
@@ -14,6 +15,7 @@ export default function PropiedadesPage() {
   const [propiedades, setPropiedades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get('q') || '');
+  const [error, setError] = useState(null);
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
@@ -36,6 +38,11 @@ export default function PropiedadesPage() {
         setPropiedades(conFotos);
       } catch (err) {
         console.error('Error cargando propiedades:', err);
+        const msg = err?.response?.status
+          ? `Error ${err.response.status}: No se pudo conectar con el servidor. Verifica que el backend esté activo.`
+          : `Error de red: ${err.message || 'Sin conexión al servidor'}`;
+        setError(msg);
+        toast.error('No se pudo cargar las propiedades');
       } finally {
         setLoading(false);
       }
@@ -72,6 +79,12 @@ export default function PropiedadesPage() {
 
         {loading ? (
           <LoadingSpinner text="Cargando propiedades..." />
+        ) : error ? (
+          <div style={{ background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '12px', padding: '2rem', textAlign: 'center', color: '#fca5a5' }}>
+            <p style={{ fontWeight: 700, marginBottom: '0.5rem' }}>⚠️ Error de conexión</p>
+            <p style={{ fontSize: '0.9rem' }}>{error}</p>
+            <button className="btn btn-ghost" style={{ marginTop: '1rem' }} onClick={() => { setError(null); setLoading(true); }}>Reintentar</button>
+          </div>
         ) : filtradas.length === 0 ? (
           <EmptyState
             title="No se encontraron propiedades"
