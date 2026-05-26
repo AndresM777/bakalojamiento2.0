@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { HiOutlineEnvelope, HiOutlineLockClosed } from 'react-icons/hi2';
 import { authApi } from '../api/auth.api';
+import { clientesApi } from '../api/clientes.api';
 import useAuthStore from '../stores/useAuthStore';
 import { validateForm, isValidEmail, isRequired } from '../utils/validators';
 
@@ -26,7 +27,6 @@ export default function LoginPage() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    // Limpiar error del campo al escribir
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
     }
@@ -43,6 +43,23 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data } = await authApi.login(form);
+
+      // Si el backend no retornó clienteId en la respuesta, intentamos buscarlo
+      if (!data.clienteId) {
+        try {
+          const { data: listaClientes } = await clientesApi.getAll({ nombre: form.email });
+          const lista = Array.isArray(listaClientes)
+            ? listaClientes
+            : Array.isArray(listaClientes?.items) ? listaClientes.items : [];
+          const cliente = lista.find((c) => c.email === form.email);
+          if (cliente?.clienteId) {
+            data.clienteId = cliente.clienteId;
+          }
+        } catch {
+          // Si falla la búsqueda, continuamos sin clienteId (admin u otro rol)
+        }
+      }
+
       login(data);
       toast.success(`¡Bienvenido, ${data.nombreCompleto}!`);
       navigate('/');

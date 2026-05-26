@@ -7,6 +7,7 @@ import { habitacionesApi } from '../api/habitaciones.api';
 import { fotosApi } from '../api/fotos.api';
 import { calendarioApi } from '../api/calendario.api';
 import { reservasApi } from '../api/reservas.api';
+import { clientesApi } from '../api/clientes.api';
 import useAuthStore from '../stores/useAuthStore';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import StarRating from '../components/ui/StarRating';
@@ -16,7 +17,25 @@ import { isValidDateRange, isFutureDate } from '../utils/validators';
 export default function PropiedadDetallePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, getClienteId } = useAuthStore();
+  const { isAuthenticated, getClienteId, user } = useAuthStore();
+
+  // Resuelve el clienteId del usuario logueado.
+  // Si no viene en el token (usuario real del backend), lo busca por email.
+  const resolveClienteId = async () => {
+    const stored = getClienteId();
+    if (stored) return stored;
+    if (!user?.email) return null;
+    try {
+      // Intenta buscar cliente por email usando getAll con filtro
+      // El contrato expone GET /clientes-lucano que devuelve lista
+      const { data } = await clientesApi.getAll({ nombre: user.email });
+      const lista = Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
+      const encontrado = lista.find(c => c.email === user.email);
+      return encontrado?.clienteId ?? null;
+    } catch {
+      return null;
+    }
+  };
 
   const [propiedad, setPropiedad] = useState(null);
   const [habitaciones, setHabitaciones] = useState([]);
@@ -122,8 +141,18 @@ export default function PropiedadDetallePage() {
 
     setReservando(true);
     try {
+      // Resolver clienteId — puede no venir directo si el backend no lo incluyó en el JWT
+      const clienteId = await resolveClienteId();
+      if (!clienteId) {
+        toast.error('No se pudo identificar tu cuenta de cliente. Si eres administrador, no puedes hacer reservas.');
+        setReservando(false);
+        return;
+      }
+
+      const nochesCalculadas = Math.max(1, noches); // Siempre al menos 1 noche
+
       const payload = {
-        clienteId: getClienteId(),
+        clienteId: Number(clienteId),
         alojamientoId: Number(id),
         fechaCheckIn: form.fechaCheckIn,
         fechaCheckOut: form.fechaCheckOut,
@@ -133,12 +162,13 @@ export default function PropiedadDetallePage() {
         habitaciones: [
           {
             habitacionId: Number(form.habitacionId),
-            precioPorNoche: selectedHab ? selectedHab.precioNoche : 0,
-            numNoches: noches
+            precioPorNoche: selectedHab ? Number(selectedHab.precioNoche) : 0,
+            numNoches: nochesCalculadas
           }
         ]
       };
 
+      console.log('[Reserva] Payload enviado:', JSON.stringify(payload, null, 2));
       const { data } = await reservasApi.crear(payload);
       toast.success('¡Reserva creada exitosamente!');
       
