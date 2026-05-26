@@ -56,9 +56,12 @@ export default function FacturaPage() {
             <div className="factura-section">
               <h3>Detalle del Pago</h3>
               <div className="factura-grid">
-                <div><span className="label">Monto</span><strong>{formatCurrency(factura.monto)}</strong></div>
+                <div><span className="label">Monto</span><strong>{formatCurrency(factura.monto || reserva?.total || 0)}</strong></div>
                 <div><span className="label">Fecha de pago</span><span>{formatDateTime(factura.fechaPago)}</span></div>
                 <div><span className="label">Estado</span><StatusBadge status={factura.estado} /></div>
+                {factura.metodoPagoTipo && (
+                  <div><span className="label">Método de pago</span><span>{factura.metodoPagoTipo}</span></div>
+                )}
               </div>
             </div>
           </div>

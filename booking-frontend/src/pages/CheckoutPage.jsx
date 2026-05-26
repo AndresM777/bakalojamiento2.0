@@ -58,9 +58,9 @@ export default function CheckoutPage() {
           }
         ]
       };
-      const { data } = await facturasApi.crear(payload);
-      await facturasApi.aprobar(data.facturaId);
+      const { data: facturaCreada } = await facturasApi.crear(payload);
       
+      // Actualizar estado de la reserva a Confirmada
       try {
         await reservasApi.actualizarEstado(reserva.reservaId, { estado: 'Confirmada' });
       } catch (errState) {

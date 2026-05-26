@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { HiOutlineCalendarDays } from 'react-icons/hi2';
+import { HiOutlineCalendarDays, HiOutlineXCircle } from 'react-icons/hi2';
 import { reservasApi } from '../api/reservas.api';
 import useAuthStore from '../stores/useAuthStore';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import EmptyState from '../components/ui/EmptyState';
 import StatusBadge from '../components/ui/StatusBadge';
 import { formatDate, formatCurrency } from '../utils/formatters';
+import toast from 'react-hot-toast';
 
 export default function MisReservasPage() {
   const { getClienteId, isAuthenticated } = useAuthStore();
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cancelando, setCancelando] = useState(null); // id de reserva que se está cancelando
 
   useEffect(() => {
     const fetch = async () => {
@@ -25,6 +27,22 @@ export default function MisReservasPage() {
     };
     if (isAuthenticated) fetch(); else setLoading(false);
   }, [isAuthenticated, getClienteId]);
+
+  const handleCancelar = async (reservaId) => {
+    if (!window.confirm('¿Estás seguro de que deseas cancelar esta reserva? Esta acción no se puede deshacer.')) return;
+    setCancelando(reservaId);
+    try {
+      await reservasApi.actualizarEstado(reservaId, { estado: 'Cancelada' });
+      setReservas((prev) => prev.map((r) =>
+        r.reservaId === reservaId ? { ...r, estado: 'Cancelada' } : r
+      ));
+      toast.success('Reserva cancelada correctamente.');
+    } catch (err) {
+      toast.error(err.backendMessage || 'No se pudo cancelar la reserva.');
+    } finally {
+      setCancelando(null);
+    }
+  };
 
   if (!isAuthenticated) return (
     <div className="container page-padding">
@@ -65,6 +83,17 @@ export default function MisReservasPage() {
                   <div className="reserva-actions">
                     {r.estado?.toLowerCase() === 'pendiente' && (
                       <Link to={`/checkout/${r.reservaId}`} className="btn btn-primary btn-sm">Pagar</Link>
+                    )}
+                    {r.estado?.toLowerCase() === 'pendiente' && (
+                      <button
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(220,38,38,0.15)', color: '#fca5a5', border: '1px solid rgba(220,38,38,0.3)' }}
+                        onClick={() => handleCancelar(r.reservaId)}
+                        disabled={cancelando === r.reservaId}
+                      >
+                        <HiOutlineXCircle size={14} />
+                        {cancelando === r.reservaId ? 'Cancelando...' : 'Cancelar'}
+                      </button>
                     )}
                     {r.estado?.toLowerCase() === 'confirmada' && (
                       <Link to={`/factura/${r.reservaId}`} className="btn btn-ghost btn-sm">Ver Factura</Link>

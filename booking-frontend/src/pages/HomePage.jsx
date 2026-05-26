@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { HiOutlineMagnifyingGlass, HiOutlineMapPin, HiStar, HiOutlineShieldCheck, HiOutlineClock, HiOutlineHeart } from 'react-icons/hi2';
+import { HiOutlineMagnifyingGlass, HiOutlineMapPin, HiStar, HiOutlineShieldCheck, HiOutlineClock, HiOutlineHeart, HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import { alojamientosApi } from '../api/alojamientos.api';
 import { fotosApi } from '../api/fotos.api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
