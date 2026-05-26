@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { reservasApi } from '../../api/reservas.api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
@@ -37,7 +38,7 @@ export default function AdminReservas() {
       {items.length === 0 ? <EmptyState title="Sin reservas" /> : (
         <div className="admin-table-wrapper">
           <table className="admin-table">
-            <thead><tr><th>ID</th><th>Código</th><th>Check-in</th><th>Check-out</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>ID</th><th>Código</th><th>Check-in</th><th>Check-out</th><th>Total</th><th>Estado</th><th>Factura</th><th>Acciones</th></tr></thead>
             <tbody>
               {items.map((r) => (
                 <tr key={r.reservaId}>
@@ -47,6 +48,15 @@ export default function AdminReservas() {
                   <td>{formatDate(r.fechaCheckOut)}</td>
                   <td>{formatCurrency(r.total)}</td>
                   <td><StatusBadge status={r.estado} /></td>
+                  <td>
+                    {r.estado?.toLowerCase() === 'confirmada' ? (
+                      <Link to={`/factura/${r.reservaId}`} className="btn btn-sm btn-ghost" style={{ textDecoration: 'underline', color: '#6366f1' }}>
+                        Ver Factura
+                      </Link>
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
+                  </td>
                   <td className="actions-cell">
                     {r.estado?.toLowerCase() === 'pendiente' && (
                       <>

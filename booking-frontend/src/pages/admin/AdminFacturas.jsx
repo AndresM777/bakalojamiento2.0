@@ -14,10 +14,20 @@ export default function AdminFacturas() {
     if (!facturaId) return;
     setLoading(true);
     try {
+      // Intentar primero buscar por ID de factura
       const { data } = await facturasApi.getById(facturaId);
       setFactura(data);
-    } catch { setFactura(null); }
-    finally { setLoading(false); }
+    } catch {
+      try {
+        // Si falla, intentar buscar por ID de reserva
+        const { data } = await facturasApi.getByReservaId(facturaId);
+        setFactura(data);
+      } catch {
+        setFactura(null);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
