@@ -255,6 +255,39 @@ paths:
         '400':
           description: Error de disponibilidad o datos inválidos.
 
+  /api/v2/reservas-lucano:
+    post:
+      tags: [Reservas V2]
+      summary: Crear una nueva reserva con Idempotencia Obligatoria (V2)
+      description: >
+        Registra una reserva de alojamiento bloqueando las habitaciones seleccionadas.
+        Exige mandatoriamente la cabecera 'X-Idempotency-Key' para evitar transacciones dobles o duplicadas en red.
+      parameters:
+        - name: X-Idempotency-Key
+          in: header
+          required: true
+          description: Clave única UUID v4 de idempotencia.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearReservaRequestV2'
+      responses:
+        '201':
+          description: Reserva creada y registrada correctamente (o devuelta de caché si es duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaResponse'
+        '400':
+          description: Cabecera 'X-Idempotency-Key' ausente o datos de reserva inválidos.
+        '409':
+          description: Transacción duplicada concurrente en proceso (Conflict).
+
   /api/v1/reservas-lucano/{id}:
     get:
       tags: [Reservas]
@@ -501,6 +534,29 @@ components:
         habitacionId: { type: integer }
         precioPorNoche: { type: number, format: double }
         numNoches: { type: integer }
+
+    CrearReservaRequestV2:
+      type: object
+      required: [clienteId, alojamientoId, fechaCheckIn, fechaCheckOut, numAdultos, habitaciones]
+      properties:
+        clienteId: { type: integer }
+        alojamientoId: { type: integer }
+        fechaCheckIn: { type: string, format: date }
+        fechaCheckOut: { type: string, format: date }
+        numAdultos: { type: integer }
+        numNinos: { type: integer }
+        llevaMascotas: { type: boolean }
+        codigoDescuento: { type: string, nullable: true }
+        habitaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrearReservaHabitacionRequestV2'
+
+    CrearReservaHabitacionRequestV2:
+      type: object
+      required: [habitacionId]
+      properties:
+        habitacionId: { type: integer }
 
     ReservaResponse:
       type: object
