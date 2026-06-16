@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/calendario-lucano';
+const BASE = '/calendario-lucanoV2';
 
 export const calendarioApi = {
   getDisponibilidad: (habitacionId, mes, anio) =>

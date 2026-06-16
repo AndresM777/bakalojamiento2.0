@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/habitaciones-lucano';
+const BASE = '/habitaciones-lucanoV2';
 
 export const habitacionesApi = {
   getByAlojamientoId: (alojamientoId) =>

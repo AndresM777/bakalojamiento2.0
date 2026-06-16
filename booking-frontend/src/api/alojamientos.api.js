@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/alojamientos-lucano';
+const BASE = '/alojamientos-lucanoV2';
 
 export const alojamientosApi = {
   getAll: () => client.get(BASE),

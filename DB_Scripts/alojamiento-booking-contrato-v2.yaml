@@ -1,0 +1,653 @@
+openapi: 3.0.3
+info:
+  title: AlojamientoMR - Contrato de Integración para Booking (Gateway)
+  description: |
+    API pública y unificada expuesta por el API Gateway orientada a la integración con Booking y el cliente final.
+    Consolida las rutas y DTOs reales de los microservicios: Alojamientos, Clientes, Reservas y Facturación.
+  version: 1.0.0
+
+servers:
+  - url: https://apigatway-0wjx.onrender.com
+    description: API Gateway Producción (Render)
+  - url: http://localhost:5028
+    description: API Gateway Desarrollo Local
+
+tags:
+  - name: Alojamientos
+    description: Gestión y consulta de alojamientos
+  - name: Habitaciones
+    description: Gestión y consulta de habitaciones asociadas a alojamientos
+  - name: Calendario y Disponibilidad
+    description: Consulta y gestión del calendario de disponibilidad
+  - name: Clientes
+    description: Registro y búsqueda de huéspedes
+  - name: Reservas
+    description: Operaciones de reserva y actualización de estados
+  - name: Facturación
+    description: Gestión de comprobantes de pago y métodos de pago
+
+paths:
+
+  # ════════════════════════════════════════
+  # MÓDULO 1: ALOJAMIENTOS
+  # ════════════════════════════════════════
+
+  /api/v2/alojamientos-lucanoV2:
+    get:
+      tags: [Alojamientos]
+      summary: Listar todos los alojamientos
+      description: Obtiene el catálogo completo de hospedajes registrados.
+      responses:
+        '200':
+          description: Lista de alojamientos obtenida correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlojamientoResponse'
+    post:
+      tags: [Alojamientos]
+      summary: Crear un nuevo alojamiento
+      description: Registra un nuevo hospedaje asociado a un socio.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearAlojamientoRequest'
+      responses:
+        '201':
+          description: Alojamiento creado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlojamientoResponse'
+
+  /api/v2/alojamientos-lucanoV2/{id}:
+    get:
+      tags: [Alojamientos]
+      summary: Obtener alojamiento por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle del alojamiento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlojamientoResponse'
+        '404':
+          description: Alojamiento no encontrado.
+
+  # ════════════════════════════════════════
+  # MÓDULO 2: HABITACIONES
+  # ════════════════════════════════════════
+
+  /api/v2/habitaciones-lucanoV2/alojamiento/{alojamientoId}:
+    get:
+      tags: [Habitaciones]
+      summary: Listar habitaciones de un alojamiento
+      parameters:
+        - name: alojamientoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de habitaciones asociadas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HabitacionResponse'
+
+  /api/v2/habitaciones-lucanoV2/{id}:
+    get:
+      tags: [Habitaciones]
+      summary: Obtener habitación por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de la habitación.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HabitacionResponse'
+        '404':
+          description: Habitación no encontrada.
+
+  # ════════════════════════════════════════
+  # MÓDULO 3: CALENDARIO Y DISPONIBILIDAD
+  # ════════════════════════════════════════
+
+  /api/v2/calendario-lucanoV2/disponibilidad:
+    get:
+      tags: [Calendario y Disponibilidad]
+      summary: Verificar disponibilidad de una habitación en un rango de fechas
+      parameters:
+        - name: habitacionId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: fechaDesde
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          example: "2026-07-01"
+        - name: fechaHasta
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          example: "2026-07-05"
+      responses:
+        '200':
+          description: Estado de disponibilidad.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  disponible:
+                    type: boolean
+                  mensaje:
+                    type: string
+
+  # ════════════════════════════════════════
+  # MÓDULO 4: CLIENTES Y USUARIOS
+  # ════════════════════════════════════════
+
+  /api/v2/clientes-lucanoV2/registrar:
+    post:
+      tags: [Clientes]
+      summary: Registrar nuevo huésped (cliente)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrarClienteRequest'
+      responses:
+        '201':
+          description: Cliente registrado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'
+
+  /api/v2/clientes-lucanoV2/{id}:
+    get:
+      tags: [Clientes]
+      summary: Obtener perfil del cliente por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Perfil completo del cliente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'
+        '404':
+          description: Cliente no encontrado.
+
+  /api/v2/clientes-lucanoV2/cedula/{cedula}:
+    get:
+      tags: [Clientes]
+      summary: Buscar cliente por Cédula
+      parameters:
+        - name: cedula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'
+        '404':
+          description: Cliente no encontrado.
+
+  # ════════════════════════════════════════
+  # MÓDULO 5: RESERVAS
+  # ════════════════════════════════════════
+
+  /api/v2/reservas-lucanoV2:
+    post:
+      tags: [Reservas]
+      summary: Crear una nueva reserva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearReservaRequest'
+      responses:
+        '201':
+          description: Reserva creada y registrada correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaResponse'
+        '400':
+          description: Error de disponibilidad o datos inválidos.
+
+  /api/v2/reservas-lucanoV2:
+    post:
+      tags: [Reservas V2]
+      summary: Crear una nueva reserva con Idempotencia Obligatoria (V2)
+      description: >
+        Registra una reserva de alojamiento bloqueando las habitaciones seleccionadas.
+        Exige mandatoriamente la cabecera 'X-Idempotency-Key' para evitar transacciones dobles o duplicadas en red.
+      parameters:
+        - name: X-Idempotency-Key
+          in: header
+          required: true
+          description: Clave única UUID v4 de idempotencia.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearReservaRequestV2'
+      responses:
+        '201':
+          description: Reserva creada y registrada correctamente (o devuelta de caché si es duplicada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaResponse'
+        '400':
+          description: Cabecera 'X-Idempotency-Key' ausente o datos de reserva inválidos.
+        '409':
+          description: Transacción duplicada concurrente en proceso (Conflict).
+
+  /api/v2/reservas-lucanoV2/{id}:
+    get:
+      tags: [Reservas]
+      summary: Consultar reserva por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Información detallada de la reserva.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaResponse'
+        '404':
+          description: Reserva no encontrada.
+
+  /api/v2/reservas-lucanoV2/cliente/{clienteId}:
+    get:
+      tags: [Reservas]
+      summary: Consultar reservas asociadas a un cliente
+      parameters:
+        - name: clienteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de reservas del cliente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservaResponse'
+
+  /api/v2/reservas-lucanoV2/{id}/estado:
+    patch:
+      tags: [Reservas]
+      summary: Actualizar estado de una reserva (Confirmar, Cancelar, etc.)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActualizarEstadoReservaRequest'
+      responses:
+        '204':
+          description: Estado actualizado correctamente.
+        '404':
+          description: Reserva no encontrada.
+
+  # ════════════════════════════════════════
+  # MÓDULO 6: FACTURACIÓN
+  # ════════════════════════════════════════
+
+  /api/v2/facturas-lucanoV2:
+    post:
+      tags: [Facturación]
+      summary: Crear y emitir una nueva factura de pago
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearFacturaRequest'
+      responses:
+        '201':
+          description: Factura emitida correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacturaResponse'
+
+  /api/v2/facturas-lucanoV2/{id}:
+    get:
+      tags: [Facturación]
+      summary: Obtener comprobante de factura por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle del comprobante de factura.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacturaResponse'
+        '404':
+          description: Factura no encontrada.
+
+  /api/v2/facturas-lucanoV2/reserva/{reservaId}:
+    get:
+      tags: [Facturación]
+      summary: Obtener factura asociada a una reserva
+      parameters:
+        - name: reservaId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle de factura de la reserva.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacturaResponse'
+        '404':
+          description: Factura no encontrada.
+
+  /api/v2/metodospago-lucanoV2:
+    get:
+      tags: [Facturación]
+      summary: Listar métodos de pago disponibles en el sistema
+      responses:
+        '200':
+          description: Lista de métodos de pago.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetodoPagoResponse'
+
+# ═══════════════════════════════════════════════════════
+# SCHEMAS / MODELOS (Basados en DTOs de C#)
+# ═══════════════════════════════════════════════════════
+components:
+  schemas:
+
+    # ── Alojamientos ──────────────────────────────────
+    AlojamientoResponse:
+      type: object
+      properties:
+        alojamientoId: { type: integer }
+        socioId: { type: integer }
+        tipoAlojamientoId: { type: integer }
+        tipoAlojamientoNombre: { type: string }
+        nombre: { type: string }
+        ciudad: { type: string, nullable: true }
+        direccion: { type: string }
+        descripcion: { type: string, nullable: true }
+        estrellas: { type: integer, nullable: true }
+        calificacionPromedio: { type: number, format: double }
+        totalResenas: { type: integer }
+        admiteMascotas: { type: boolean }
+        tienePiscina: { type: boolean }
+        tieneParqueadero: { type: boolean }
+        estado: { type: string }
+        fechaCreacion: { type: string, format: date-time }
+
+    CrearAlojamientoRequest:
+      type: object
+      required: [socioId, tipoAlojamientoId, nombre, direccion]
+      properties:
+        socioId: { type: integer }
+        tipoAlojamientoId: { type: integer }
+        nombre: { type: string, maxLength: 200 }
+        ciudad: { type: string, maxLength: 100, nullable: true }
+        direccion: { type: string, maxLength: 300 }
+        descripcion: { type: string, nullable: true }
+        admiteMascotas: { type: boolean, default: false }
+        tienePiscina: { type: boolean, default: false }
+        tieneParqueadero: { type: boolean, default: false }
+
+    # ── Habitaciones ──────────────────────────────────
+    HabitacionResponse:
+      type: object
+      properties:
+        habitacionId: { type: integer }
+        alojamientoId: { type: integer }
+        nombre: { type: string }
+        descripcion: { type: string, nullable: true }
+        capacidadAdultos: { type: integer }
+        capacidadNinos: { type: integer }
+        numBanos: { type: integer }
+        numDormitorios: { type: integer }
+        tieneCocina: { type: boolean }
+        tieneAireAcondicionado: { type: boolean }
+        superficieM2: { type: number, format: double, nullable: true }
+        precioNoche: { type: number, format: double }
+
+    # ── Clientes ──────────────────────────────────────
+    RegistrarClienteRequest:
+      type: object
+      required: [email, password, nombreCompleto, cedula, telefono, domicilio]
+      properties:
+        email: { type: string, format: email, maxLength: 200 }
+        password: { type: string, minLength: 8, maxLength: 500 }
+        nombreCompleto: { type: string, maxLength: 200 }
+        cedula: { type: string, description: "Solo 10 dígitos numéricos" }
+        telefono: { type: string, maxLength: 200 }
+        domicilio: { type: string, maxLength: 300 }
+
+    ClienteResponse:
+      type: object
+      properties:
+        clienteId: { type: integer }
+        usuarioId: { type: integer, nullable: true }
+        cedula: { type: string }
+        fotoUrl: { type: string, nullable: true }
+        telefono: { type: string, nullable: true }
+        domicilio: { type: string, nullable: true }
+        email: { type: string, format: email }
+        totalReservas: { type: integer }
+        fechaCreacion: { type: string, format: date-time }
+
+    # ── Reservas ──────────────────────────────────────
+    CrearReservaRequest:
+      type: object
+      required: [clienteId, alojamientoId, fechaCheckIn, fechaCheckOut, numAdultos, habitaciones]
+      properties:
+        clienteId: { type: integer }
+        alojamientoId: { type: integer }
+        fechaCheckIn: { type: string, format: date }
+        fechaCheckOut: { type: string, format: date }
+        numAdultos: { type: integer }
+        numNinos: { type: integer }
+        llevaMascotas: { type: boolean }
+        codigoDescuento: { type: string, nullable: true }
+        habitaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrearReservaHabitacionRequest'
+
+    CrearReservaHabitacionRequest:
+      type: object
+      required: [habitacionId, precioPorNoche, numNoches]
+      properties:
+        habitacionId: { type: integer }
+        precioPorNoche: { type: number, format: double }
+        numNoches: { type: integer }
+
+    CrearReservaRequestV2:
+      type: object
+      required: [clienteId, alojamientoId, fechaCheckIn, fechaCheckOut, numAdultos, habitaciones]
+      properties:
+        clienteId: { type: integer }
+        alojamientoId: { type: integer }
+        fechaCheckIn: { type: string, format: date }
+        fechaCheckOut: { type: string, format: date }
+        numAdultos: { type: integer }
+        numNinos: { type: integer }
+        llevaMascotas: { type: boolean }
+        codigoDescuento: { type: string, nullable: true }
+        habitaciones:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrearReservaHabitacionRequestV2'
+
+    CrearReservaHabitacionRequestV2:
+      type: object
+      required: [habitacionId]
+      properties:
+        habitacionId: { type: integer }
+
+    ReservaResponse:
+      type: object
+      properties:
+        reservaId: { type: integer }
+        clienteId: { type: integer }
+        alojamientoId: { type: integer }
+        fechaCheckIn: { type: string, format: date }
+        fechaCheckOut: { type: string, format: date }
+        numAdultos: { type: integer }
+        numNinos: { type: integer }
+        llevaMascotas: { type: boolean }
+        numHabitaciones: { type: integer }
+        subTotal: { type: number, format: double }
+        total: { type: number, format: double }
+        estado: { type: string }
+        codigoReserva: { type: string }
+        fechaCreacion: { type: string, format: date-time }
+        detallesHabitacion:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalleHabitacionResponse'
+        codigoDescuentoAplicado: { type: string, nullable: true }
+        porcentajeDescuento: { type: number, format: double, nullable: true }
+
+    DetalleHabitacionResponse:
+      type: object
+      properties:
+        detalleId: { type: integer }
+        reservaId: { type: integer }
+        habitacionId: { type: integer }
+        precioPorNoche: { type: number, format: double }
+        numNoches: { type: integer }
+        subTotalHabitacion: { type: number, format: double }
+
+    ActualizarEstadoReservaRequest:
+      type: object
+      required: [estado]
+      properties:
+        estado: { type: string, maxLength: 30 }
+
+    # ── Facturación ───────────────────────────────────
+    CrearFacturaRequest:
+      type: object
+      required: [reservaId, monto, detalles]
+      properties:
+        reservaId: { type: integer }
+        metodoPagoId: { type: integer, nullable: true }
+        monto: { type: number, format: double }
+        fechaPago: { type: string, format: date-time, nullable: true }
+        detalles:
+          type: array
+          items:
+            $ref: '#/components/schemas/CrearDetalleFacturaRequest'
+
+    CrearDetalleFacturaRequest:
+      type: object
+      required: [descripcion, cantidad, precioUnitario]
+      properties:
+        descripcion: { type: string, maxLength: 200 }
+        cantidad: { type: integer }
+        precioUnitario: { type: number, format: double }
+
+    FacturaResponse:
+      type: object
+      properties:
+        facturaId: { type: integer }
+        reservaId: { type: integer }
+        metodoPagoId: { type: integer, nullable: true }
+        metodoPagoTipo: { type: string, nullable: true }
+        monto: { type: number, format: double }
+        estado: { type: string }
+        fechaPago: { type: string, format: date-time, nullable: true }
+        fechaCreacion: { type: string, format: date-time }
+        detalles:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalleFacturaResponse'
+
+    DetalleFacturaResponse:
+      type: object
+      properties:
+        detalleId: { type: integer }
+        facturaId: { type: integer }
+        descripcion: { type: string }
+        cantidad: { type: integer }
+        precioUnitario: { type: number, format: double }
+        subTotal: { type: number, format: double }
+
+    MetodoPagoResponse:
+      type: object
+      properties:
+        metodoPagoId: { type: integer }
+        tipo: { type: string }
