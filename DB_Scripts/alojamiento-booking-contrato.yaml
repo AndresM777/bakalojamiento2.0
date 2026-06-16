@@ -32,7 +32,7 @@ paths:
   # MÓDULO 1: ALOJAMIENTOS
   # ════════════════════════════════════════
 
-  /api/v1/alojamientos-lucano:
+  /api/v2/alojamientos-lucano:
     get:
       tags: [Alojamientos]
       summary: Listar todos los alojamientos
@@ -64,7 +64,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AlojamientoResponse'
 
-  /api/v1/alojamientos-lucano/{id}:
+  /api/v2/alojamientos-lucano/{id}:
     get:
       tags: [Alojamientos]
       summary: Obtener alojamiento por ID
@@ -88,7 +88,7 @@ paths:
   # MÓDULO 2: HABITACIONES
   # ════════════════════════════════════════
 
-  /api/v1/habitaciones-lucano/alojamiento/{alojamientoId}:
+  /api/v2/habitaciones-lucano/alojamiento/{alojamientoId}:
     get:
       tags: [Habitaciones]
       summary: Listar habitaciones de un alojamiento
@@ -108,7 +108,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/HabitacionResponse'
 
-  /api/v1/habitaciones-lucano/{id}:
+  /api/v2/habitaciones-lucano/{id}:
     get:
       tags: [Habitaciones]
       summary: Obtener habitación por ID
@@ -132,7 +132,7 @@ paths:
   # MÓDULO 3: CALENDARIO Y DISPONIBILIDAD
   # ════════════════════════════════════════
 
-  /api/v1/calendario-lucano/disponibilidad:
+  /api/v2/calendario-lucano/disponibilidad:
     get:
       tags: [Calendario y Disponibilidad]
       summary: Verificar disponibilidad de una habitación en un rango de fechas
@@ -173,7 +173,7 @@ paths:
   # MÓDULO 4: CLIENTES Y USUARIOS
   # ════════════════════════════════════════
 
-  /api/v1/clientes-lucano/registrar:
+  /api/v2/clientes-lucano/registrar:
     post:
       tags: [Clientes]
       summary: Registrar nuevo huésped (cliente)
@@ -191,7 +191,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ClienteResponse'
 
-  /api/v1/clientes-lucano/{id}:
+  /api/v2/clientes-lucano/{id}:
     get:
       tags: [Clientes]
       summary: Obtener perfil del cliente por ID
@@ -211,7 +211,7 @@ paths:
         '404':
           description: Cliente no encontrado.
 
-  /api/v1/clientes-lucano/cedula/{cedula}:
+  /api/v2/clientes-lucano/cedula/{cedula}:
     get:
       tags: [Clientes]
       summary: Buscar cliente por Cédula
@@ -235,7 +235,7 @@ paths:
   # MÓDULO 5: RESERVAS
   # ════════════════════════════════════════
 
-  /api/v1/reservas-lucano:
+  /api/v2/reservas-lucano:
     post:
       tags: [Reservas]
       summary: Crear una nueva reserva
@@ -288,7 +288,7 @@ paths:
         '409':
           description: Transacción duplicada concurrente en proceso (Conflict).
 
-  /api/v1/reservas-lucano/{id}:
+  /api/v2/reservas-lucano/{id}:
     get:
       tags: [Reservas]
       summary: Consultar reserva por ID
@@ -308,7 +308,7 @@ paths:
         '404':
           description: Reserva no encontrada.
 
-  /api/v1/reservas-lucano/cliente/{clienteId}:
+  /api/v2/reservas-lucano/cliente/{clienteId}:
     get:
       tags: [Reservas]
       summary: Consultar reservas asociadas a un cliente
@@ -328,7 +328,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReservaResponse'
 
-  /api/v1/reservas-lucano/{id}/estado:
+  /api/v2/reservas-lucano/{id}/estado:
     patch:
       tags: [Reservas]
       summary: Actualizar estado de una reserva (Confirmar, Cancelar, etc.)
@@ -354,7 +354,7 @@ paths:
   # MÓDULO 6: FACTURACIÓN
   # ════════════════════════════════════════
 
-  /api/v1/facturas-lucano:
+  /api/v2/facturas-lucano:
     post:
       tags: [Facturación]
       summary: Crear y emitir una nueva factura de pago
@@ -372,7 +372,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/FacturaResponse'
 
-  /api/v1/facturas-lucano/{id}:
+  /api/v2/facturas-lucano/{id}:
     get:
       tags: [Facturación]
       summary: Obtener comprobante de factura por ID
@@ -392,7 +392,7 @@ paths:
         '404':
           description: Factura no encontrada.
 
-  /api/v1/facturas-lucano/reserva/{reservaId}:
+  /api/v2/facturas-lucano/reserva/{reservaId}:
     get:
       tags: [Facturación]
       summary: Obtener factura asociada a una reserva
@@ -412,7 +412,7 @@ paths:
         '404':
           description: Factura no encontrada.
 
-  /api/v1/metodospago-lucano:
+  /api/v2/metodospago-lucano:
     get:
       tags: [Facturación]
       summary: Listar métodos de pago disponibles en el sistema
