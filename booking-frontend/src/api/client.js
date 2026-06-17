@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Siempre usamos la ruta relativa /api/v1
-// Vercel hace el proxy desde /api/v1/* hacia el gateway en Render
-// Esto elimina el problema de CORS y de variables de entorno incorrectas en el dashboard de Vercel
+// Frontend usa /api/v2 como prefijo lógico de la versión del contrato.
+// Vercel reescribe /api/v2/* → gateway/api/v1/* internamente.
 const BASE_URL = '/api/v2';
 
 const client = axios.create({

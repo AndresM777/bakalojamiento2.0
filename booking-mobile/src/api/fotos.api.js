@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/fotos-lucanoV2';
+const BASE = '/fotos-lucano';
 
 export const fotosApi = {
   getByAlojamientoId: (alojamientoId) =>

@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "alojamiento-mr-full-suite",
     "name": "AlojamientoMR V2 - Suite Completa de Pruebas",
-    "description": "Colección completa de pruebas para los 4 microservicios de AlojamientoMR. VERSION 2 — todos los endpoints apuntan a /api/v2/ y usan el sufijo V2 (ej: alojamientos-lucanoV2).",
+    "description": "Colección completa de pruebas para los 4 microservicios de AlojamientoMR. VERSION 2 — todos los endpoints apuntan a /api/v1/ y usan el sufijo V2 (ej: alojamientos-lucano).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -22,7 +22,7 @@
       "name": "🔐 1. Autenticación (Usuarios MS)",
       "item": [
         {
-          "name": "POST /auth-lucanoV2/login",
+          "name": "POST /auth-lucano/login",
           "event": [
             {
               "listen": "test",
@@ -48,15 +48,15 @@
               "raw": "{\n  \"email\": \"admin@alojamiento.com\",\n  \"password\": \"Admin1234!\"\n}"
             },
             "url": {
-              "raw": "{{clientes_url}}/api/v2/auth-lucanoV2/login",
+              "raw": "{{clientes_url}}/api/v1/auth-lucano/login",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "auth-lucanoV2", "login"]
+              "path": ["api", "v1", "auth-lucano", "login"]
             },
             "description": "Autenticación de usuario. El token JWT se guarda automáticamente en la variable 'token' para las demás requests."
           }
         },
         {
-          "name": "POST /clientes-lucanoV2/registrar",
+          "name": "POST /clientes-lucano/registrar",
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -65,9 +65,9 @@
               "raw": "{\n  \"email\": \"test@prueba.com\",\n  \"password\": \"Test1234!\",\n  \"nombreCompleto\": \"Test Usuario\",\n  \"cedula\": \"1234567890\",\n  \"telefono\": \"0987654321\",\n  \"domicilio\": \"Calle Falsa 123\"\n}"
             },
             "url": {
-              "raw": "{{clientes_url}}/api/v2/clientes-lucanoV2/registrar",
+              "raw": "{{clientes_url}}/api/v1/clientes-lucano/registrar",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "clientes-lucanoV2", "registrar"]
+              "path": ["api", "v1", "clientes-lucano", "registrar"]
             }
           }
         }
@@ -77,7 +77,7 @@
       "name": "👥 2. Clientes (Usuarios MS)",
       "item": [
         {
-          "name": "GET /clientes-lucanoV2 - Todos los clientes",
+          "name": "GET /clientes-lucano - Todos los clientes",
           "event": [
             {
               "listen": "test",
@@ -97,14 +97,14 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{clientes_url}}/api/v2/clientes-lucanoV2",
+              "raw": "{{clientes_url}}/api/v1/clientes-lucano",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "clientes-lucanoV2"]
+              "path": ["api", "v1", "clientes-lucano"]
             }
           }
         },
         {
-          "name": "GET /clientes-lucanoV2/:id - Cliente por ID",
+          "name": "GET /clientes-lucano/:id - Cliente por ID",
           "event": [
             {
               "listen": "test",
@@ -120,9 +120,9 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{clientes_url}}/api/v2/clientes-lucanoV2/{{clienteId}}",
+              "raw": "{{clientes_url}}/api/v1/clientes-lucano/{{clienteId}}",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "clientes-lucanoV2", "{{clienteId}}"]
+              "path": ["api", "v1", "clientes-lucano", "{{clienteId}}"]
             }
           }
         },
@@ -132,9 +132,9 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{clientes_url}}/api/v2/usuarios-lucano",
+              "raw": "{{clientes_url}}/api/v1/usuarios-lucano",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "usuarios-lucano"]
+              "path": ["api", "v1", "usuarios-lucano"]
             }
           }
         },
@@ -144,9 +144,9 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{clientes_url}}/api/v2/localizaciones-lucano",
+              "raw": "{{clientes_url}}/api/v1/localizaciones-lucano",
               "host": ["{{clientes_url}}"],
-              "path": ["api", "v2", "localizaciones-lucano"]
+              "path": ["api", "v1", "localizaciones-lucano"]
             }
           }
         }
@@ -156,7 +156,7 @@
       "name": "🏨 3. Alojamientos (Alojamientos MS)",
       "item": [
         {
-          "name": "GET /alojamientos-lucanoV2 - Todos los alojamientos",
+          "name": "GET /alojamientos-lucano - Todos los alojamientos",
           "event": [
             {
               "listen": "test",
@@ -175,26 +175,26 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/alojamientos-lucanoV2",
+              "raw": "{{alojamientos_url}}/api/v1/alojamientos-lucano",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "alojamientos-lucanoV2"]
+              "path": ["api", "v1", "alojamientos-lucano"]
             }
           }
         },
         {
-          "name": "GET /alojamientos-lucanoV2/:id - Detalle de alojamiento",
+          "name": "GET /alojamientos-lucano/:id - Detalle de alojamiento",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/alojamientos-lucanoV2/{{alojamientoId}}",
+              "raw": "{{alojamientos_url}}/api/v1/alojamientos-lucano/{{alojamientoId}}",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "alojamientos-lucanoV2", "{{alojamientoId}}"]
+              "path": ["api", "v1", "alojamientos-lucano", "{{alojamientoId}}"]
             }
           }
         },
         {
-          "name": "POST /alojamientos-lucanoV2 - Crear alojamiento",
+          "name": "POST /alojamientos-lucano - Crear alojamiento",
           "request": {
             "method": "POST",
             "header": [
@@ -206,14 +206,14 @@
               "raw": "{\n  \"socioId\": 1,\n  \"tipoAlojamientoId\": 1,\n  \"nombre\": \"Hotel Prueba Postman\",\n  \"ciudad\": \"Bogotá\",\n  \"direccion\": \"Calle 123 # 45-67\",\n  \"descripcion\": \"Alojamiento creado desde colección Postman.\",\n  \"admiteMascotas\": false,\n  \"tienePiscina\": true,\n  \"tieneParqueadero\": true\n}"
             },
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/alojamientos-lucanoV2",
+              "raw": "{{alojamientos_url}}/api/v1/alojamientos-lucano",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "alojamientos-lucanoV2"]
+              "path": ["api", "v1", "alojamientos-lucano"]
             }
           }
         },
         {
-          "name": "GET /habitaciones-lucanoV2/alojamiento/:id - Habitaciones de alojamiento",
+          "name": "GET /habitaciones-lucano/alojamiento/:id - Habitaciones de alojamiento",
           "event": [
             {
               "listen": "test",
@@ -232,14 +232,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/habitaciones-lucanoV2/alojamiento/{{alojamientoId}}",
+              "raw": "{{alojamientos_url}}/api/v1/habitaciones-lucano/alojamiento/{{alojamientoId}}",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "habitaciones-lucanoV2", "alojamiento", "{{alojamientoId}}"]
+              "path": ["api", "v1", "habitaciones-lucano", "alojamiento", "{{alojamientoId}}"]
             }
           }
         },
         {
-          "name": "POST /habitaciones-lucanoV2 - Crear habitación",
+          "name": "POST /habitaciones-lucano - Crear habitación",
           "request": {
             "method": "POST",
             "header": [
@@ -251,21 +251,21 @@
               "raw": "{\n  \"alojamientoId\": {{alojamientoId}},\n  \"nombre\": \"Habitación Deluxe Prueba\",\n  \"descripcion\": \"Habitación creada desde Postman.\",\n  \"capacidadAdultos\": 2,\n  \"capacidadNinos\": 1,\n  \"numBanos\": 1,\n  \"numDormitorios\": 1,\n  \"tieneCocina\": false,\n  \"tieneAireAcondicionado\": true,\n  \"superficieM2\": 35,\n  \"precioNoche\": 75.00\n}"
             },
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/habitaciones-lucanoV2",
+              "raw": "{{alojamientos_url}}/api/v1/habitaciones-lucano",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "habitaciones-lucanoV2"]
+              "path": ["api", "v1", "habitaciones-lucano"]
             }
           }
         },
         {
-          "name": "GET /calendario-lucanoV2/habitacion/:id - Disponibilidad mensual",
+          "name": "GET /calendario-lucano/habitacion/:id - Disponibilidad mensual",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/calendario-lucanoV2/habitacion/{{habitacionId}}?mes=6&anio=2026",
+              "raw": "{{alojamientos_url}}/api/v1/calendario-lucano/habitacion/{{habitacionId}}?mes=6&anio=2026",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "calendario-lucanoV2", "habitacion", "{{habitacionId}}"],
+              "path": ["api", "v1", "calendario-lucano", "habitacion", "{{habitacionId}}"],
               "query": [
                 { "key": "mes", "value": "6" },
                 { "key": "anio", "value": "2026" }
@@ -274,14 +274,14 @@
           }
         },
         {
-          "name": "GET /fotos-lucanoV2/alojamiento/:id - Fotos de alojamiento",
+          "name": "GET /fotos-lucano/alojamiento/:id - Fotos de alojamiento",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{alojamientos_url}}/api/v2/fotos-lucanoV2/alojamiento/{{alojamientoId}}",
+              "raw": "{{alojamientos_url}}/api/v1/fotos-lucano/alojamiento/{{alojamientoId}}",
               "host": ["{{alojamientos_url}}"],
-              "path": ["api", "v2", "fotos-lucanoV2", "alojamiento", "{{alojamientoId}}"]
+              "path": ["api", "v1", "fotos-lucano", "alojamiento", "{{alojamientoId}}"]
             }
           }
         }
@@ -291,7 +291,7 @@
       "name": "📋 4. Reservas (Reservas MS)",
       "item": [
         {
-          "name": "POST /reservas-lucanoV2 - Crear reserva",
+          "name": "POST /reservas-lucano - Crear reserva",
           "event": [
             {
               "listen": "test",
@@ -318,14 +318,14 @@
               "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"alojamientoId\": {{alojamientoId}},\n  \"fechaCheckIn\": \"2026-07-10\",\n  \"fechaCheckOut\": \"2026-07-15\",\n  \"numAdultos\": 2,\n  \"numNinos\": 0,\n  \"llevaMascotas\": false,\n  \"habitaciones\": [\n    {\n      \"habitacionId\": {{habitacionId}},\n      \"precioPorNoche\": 75.00,\n      \"numNoches\": 5\n    }\n  ]\n}"
             },
             "url": {
-              "raw": "{{reservas_url}}/api/v2/reservas-lucanoV2",
+              "raw": "{{reservas_url}}/api/v1/reservas-lucano",
               "host": ["{{reservas_url}}"],
-              "path": ["api", "v2", "reservas-lucanoV2"]
+              "path": ["api", "v1", "reservas-lucano"]
             }
           }
         },
         {
-          "name": "GET /reservas-lucanoV2/:id - Consultar reserva por ID",
+          "name": "GET /reservas-lucano/:id - Consultar reserva por ID",
           "event": [
             {
               "listen": "test",
@@ -341,38 +341,38 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{reservas_url}}/api/v2/reservas-lucanoV2/{{reservaId}}",
+              "raw": "{{reservas_url}}/api/v1/reservas-lucano/{{reservaId}}",
               "host": ["{{reservas_url}}"],
-              "path": ["api", "v2", "reservas-lucanoV2", "{{reservaId}}"]
+              "path": ["api", "v1", "reservas-lucano", "{{reservaId}}"]
             }
           }
         },
         {
-          "name": "GET /reservas-lucanoV2/cliente/:id - Reservas del cliente",
+          "name": "GET /reservas-lucano/cliente/:id - Reservas del cliente",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{reservas_url}}/api/v2/reservas-lucanoV2/cliente/{{clienteId}}",
+              "raw": "{{reservas_url}}/api/v1/reservas-lucano/cliente/{{clienteId}}",
               "host": ["{{reservas_url}}"],
-              "path": ["api", "v2", "reservas-lucanoV2", "cliente", "{{clienteId}}"]
+              "path": ["api", "v1", "reservas-lucano", "cliente", "{{clienteId}}"]
             }
           }
         },
         {
-          "name": "GET /reservas-lucanoV2/resumen/cliente/:id - Resumen ligero",
+          "name": "GET /reservas-lucano/resumen/cliente/:id - Resumen ligero",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{reservas_url}}/api/v2/reservas-lucanoV2/resumen/cliente/{{clienteId}}",
+              "raw": "{{reservas_url}}/api/v1/reservas-lucano/resumen/cliente/{{clienteId}}",
               "host": ["{{reservas_url}}"],
-              "path": ["api", "v2", "reservas-lucanoV2", "resumen", "cliente", "{{clienteId}}"]
+              "path": ["api", "v1", "reservas-lucano", "resumen", "cliente", "{{clienteId}}"]
             }
           }
         },
         {
-          "name": "PATCH /reservas-lucanoV2/:id/estado - Actualizar estado",
+          "name": "PATCH /reservas-lucano/:id/estado - Actualizar estado",
           "request": {
             "method": "PATCH",
             "header": [
@@ -384,9 +384,9 @@
               "raw": "{\n  \"estado\": \"Confirmada\"\n}"
             },
             "url": {
-              "raw": "{{reservas_url}}/api/v2/reservas-lucanoV2/{{reservaId}}/estado",
+              "raw": "{{reservas_url}}/api/v1/reservas-lucano/{{reservaId}}/estado",
               "host": ["{{reservas_url}}"],
-              "path": ["api", "v2", "reservas-lucanoV2", "{{reservaId}}", "estado"]
+              "path": ["api", "v1", "reservas-lucano", "{{reservaId}}", "estado"]
             }
           }
         }
@@ -396,7 +396,7 @@
       "name": "💳 5. Facturación (Facturacion MS)",
       "item": [
         {
-          "name": "GET /metodospago-lucanoV2 - Métodos de pago disponibles",
+          "name": "GET /metodospago-lucano - Métodos de pago disponibles",
           "event": [
             {
               "listen": "test",
@@ -412,14 +412,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{facturacion_url}}/api/v2/metodospago-lucanoV2",
+              "raw": "{{facturacion_url}}/api/v1/metodospago-lucano",
               "host": ["{{facturacion_url}}"],
-              "path": ["api", "v2", "metodospago-lucanoV2"]
+              "path": ["api", "v1", "metodospago-lucano"]
             }
           }
         },
         {
-          "name": "GET /facturas-lucanoV2/reserva/:id - Factura por reserva",
+          "name": "GET /facturas-lucano/reserva/:id - Factura por reserva",
           "event": [
             {
               "listen": "test",
@@ -434,14 +434,14 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{facturacion_url}}/api/v2/facturas-lucanoV2/reserva/{{reservaId}}",
+              "raw": "{{facturacion_url}}/api/v1/facturas-lucano/reserva/{{reservaId}}",
               "host": ["{{facturacion_url}}"],
-              "path": ["api", "v2", "facturas-lucanoV2", "reserva", "{{reservaId}}"]
+              "path": ["api", "v1", "facturas-lucano", "reserva", "{{reservaId}}"]
             }
           }
         },
         {
-          "name": "POST /facturas-lucanoV2 - Aprobar/Crear factura",
+          "name": "POST /facturas-lucano - Aprobar/Crear factura",
           "request": {
             "method": "POST",
             "header": [
@@ -453,9 +453,9 @@
               "raw": "{\n  \"reservaId\": {{reservaId}},\n  \"metodoPagoId\": 1,\n  \"monto\": 375.00,\n  \"detalles\": [\n    {\n      \"descripcion\": \"Pago de 5 noches - Habitación Deluxe\",\n      \"cantidad\": 1,\n      \"precioUnitario\": 375.00\n    }\n  ]\n}"
             },
             "url": {
-              "raw": "{{facturacion_url}}/api/v2/facturas-lucanoV2",
+              "raw": "{{facturacion_url}}/api/v1/facturas-lucano",
               "host": ["{{facturacion_url}}"],
-              "path": ["api", "v2", "facturas-lucanoV2"]
+              "path": ["api", "v1", "facturas-lucano"]
             }
           }
         }
@@ -465,7 +465,7 @@
       "name": "🚪 6. Via API Gateway (Flujo Integrado)",
       "item": [
         {
-          "name": "GET /alojamientos-lucanoV2 via Gateway",
+          "name": "GET /alojamientos-lucano via Gateway",
           "event": [
             {
               "listen": "test",
@@ -480,9 +480,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{gateway_url}}/api/v2/alojamientos-lucanoV2",
+              "raw": "{{gateway_url}}/api/v1/alojamientos-lucano",
               "host": ["{{gateway_url}}"],
-              "path": ["api", "v2", "alojamientos-lucanoV2"]
+              "path": ["api", "v1", "alojamientos-lucano"]
             }
           }
         },
@@ -499,9 +499,9 @@
               "raw": "{\n  \"clienteId\": {{clienteId}},\n  \"alojamientoId\": {{alojamientoId}},\n  \"fechaCheckIn\": \"2026-08-01\",\n  \"fechaCheckOut\": \"2026-08-05\",\n  \"numAdultos\": 2,\n  \"numNinos\": 0,\n  \"llevaMascotas\": false,\n  \"habitaciones\": [\n    {\n      \"habitacionId\": {{habitacionId}},\n      \"precioPorNoche\": 75.00,\n      \"numNoches\": 4\n    }\n  ]\n}"
             },
             "url": {
-              "raw": "{{gateway_url}}/api/v2/booking-lucano",
+              "raw": "{{gateway_url}}/api/v1/booking-lucano",
               "host": ["{{gateway_url}}"],
-              "path": ["api", "v2", "booking-lucano"]
+              "path": ["api", "v1", "booking-lucano"]
             }
           }
         },
@@ -511,9 +511,9 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
             "url": {
-              "raw": "{{gateway_url}}/api/v2/booking-lucano/{{reservaId}}",
+              "raw": "{{gateway_url}}/api/v1/booking-lucano/{{reservaId}}",
               "host": ["{{gateway_url}}"],
-              "path": ["api", "v2", "booking-lucano", "{{reservaId}}"]
+              "path": ["api", "v1", "booking-lucano", "{{reservaId}}"]
             }
           }
         }

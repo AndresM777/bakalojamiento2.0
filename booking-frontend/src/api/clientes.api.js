@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/clientes-lucanoV2';
+const BASE = '/clientes-lucano';
 
 export const clientesApi = {
   getAll: (params = {}) => {

@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/facturas-lucanoV2';
+const BASE = '/facturas-lucano';
 
 export const facturasApi = {
   getById: (id) => client.get(`${BASE}/${id}`),

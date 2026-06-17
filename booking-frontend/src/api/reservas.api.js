@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/reservas-lucanoV2';
+const BASE = '/reservas-lucano';
 
 export const reservasApi = {
   getById: (id) => client.get(`${BASE}/${id}`),

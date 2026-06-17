@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/reservas-lucanoV2';
+const BASE = '/reservas-lucano';
 
 export const reservasApi = {
   getById: (id) => client.get(`${BASE}/${id}`),
@@ -17,7 +17,7 @@ export const reservasApi = {
   crearV2: (data, idempotencyKey) => {
     // Al apuntar a la V2, sobreescribimos la ruta completa para usar /api/v2
     return client.post(
-      'https://apigatway-0wjx.onrender.com/api/v2/reservas-lucanoV2',
+      'https://apigatway-0wjx.onrender.com/api/v2/reservas-lucano',
       data,
       {
         headers: {

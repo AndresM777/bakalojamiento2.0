@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/v2/:path*",
-      "destination": "https://apigatway-0wjx.onrender.com/api/v2/:path*"
+      "destination": "https://apigatway-0wjx.onrender.com/api/v1/:path*"
     },
     {
       "source": "/:path*",

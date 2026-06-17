@@ -1,6 +1,6 @@
 import client from './client';
 
-const BASE = '/metodospago-lucanoV2';
+const BASE = '/metodospago-lucano';
 
 export const metodosPagoApi = {
   getAll: () => client.get(BASE),
