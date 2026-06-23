@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-// Frontend usa /api/v2 como prefijo lógico de la versión del contrato.
-// Vercel reescribe /api/v2/* → gateway/api/v1/* internamente.
-const BASE_URL = '/api/v2';
+// En web (Vercel): usa ruta relativa — el proxy de Vercel redirige /api/v2 → gateway/api/v1
+// En móvil (Capacitor APK): usa URL absoluta directa al gateway de producción
+const isCapacitor = typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+const BASE_URL = isCapacitor
+  ? 'https://apigatway-0wjx.onrender.com/api/v1'
+  : '/api/v2';
 
 const client = axios.create({
   baseURL: BASE_URL,
