@@ -119,24 +119,39 @@ export default function PropiedadDetallePage() {
       }
     }
 
-    // Prevención de conflictos de fechas local
+    // ── Verificación de conflictos EN EL SERVIDOR (funciona entre dispositivos) ──
     try {
-      const storedSlots = JSON.parse(localStorage.getItem('booked_slots') || '[]');
-      const checkIn = new Date(form.fechaCheckIn);
-      const checkOut = new Date(form.fechaCheckOut);
-      
-      const conflicto = storedSlots.some(slot => 
-        slot.habitacionId === Number(form.habitacionId) &&
-        checkIn < new Date(slot.fechaCheckOut) &&
-        checkOut > new Date(slot.fechaCheckIn)
-      );
-      
-      if (conflicto) {
-        toast.error('Ya tienes una reserva activa para esta habitación en las fechas seleccionadas.');
-        return;
+      const clienteId = await resolveClienteId();
+      if (clienteId) {
+        const { data: reservasExistentes } = await reservasApi.getByClienteId(clienteId);
+        const reservasActivas = Array.isArray(reservasExistentes)
+          ? reservasExistentes.filter(r => r.estado !== 'Cancelada' && r.estado !== 'Rechazada')
+          : [];
+
+        const checkIn = new Date(form.fechaCheckIn);
+        const checkOut = new Date(form.fechaCheckOut);
+
+        const conflicto = reservasActivas.some(r => {
+          // Verificar si alguna reserva activa tiene la misma habitación y fechas solapadas
+          const tieneHabitacion = Array.isArray(r.habitaciones)
+            ? r.habitaciones.some(h => h.habitacionId === Number(form.habitacionId))
+            : r.alojamientoId === Number(id); // fallback: mismo alojamiento
+
+          const solapamiento =
+            checkIn < new Date(r.fechaCheckOut) &&
+            checkOut > new Date(r.fechaCheckIn);
+
+          return tieneHabitacion && solapamiento;
+        });
+
+        if (conflicto) {
+          toast.error('⚠️ Ya tienes una reserva activa para esta habitación en esas fechas. No puedes hacer una reserva duplicada.');
+          return;
+        }
       }
-    } catch (errLocal) {
-      console.error('Error al verificar conflictos locales de reserva:', errLocal);
+    } catch (errConflicto) {
+      console.warn('No se pudo verificar conflictos en el servidor:', errConflicto);
+      // Si falla la verificación, continuamos — el backend puede rechazarlo
     }
 
     setReservando(true);
